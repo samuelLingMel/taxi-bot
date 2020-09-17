@@ -20,3 +20,49 @@ for s in range(num_steps+1):  # loop for a number of specified steps
     sleep(0.5)
 env.close() # closes the environment and ends the game
 
+state_size = env.observation_space.n  # Total number of States (S) 
+action_size = env.action_space.n      # Total number of Actions (A)
+
+################### FILL IN CODE HERE ###################
+# Initialize a qtable with 0's for all Q-values
+# np.zeros creates a table filled with zeros with shape (rows,columns)
+qtable = np.zeros((None, None))     
+##################### END CODE HERE #####################
+
+# Check result
+print(f"Our initialized Q-table: \n {qtable}")
+
+# Hyperparameters (these can be changed later)
+learning_rate = 0.9
+discount_rate = 0.8
+# Dummy variables used in the Q-learning algorithm
+reward = 10 # R_(t+1)
+state = env.observation_space.sample()      # S_t 
+action = env.action_space.sample()          # A_t
+new_state = env.observation_space.sample()  # S_(t+1)
+################### FILL IN CODE HERE ###################
+# Qlearning algorithm: Q(s,a) := Q(s,a) + learning_rate * (reward + discount_rate * max Q(s',a') - Q(s,a))
+# Hint: use the dummy variables above, and np.max(qtable[new_state,:]) for the maximum expected future reward term
+qtable[state, action] = None
+##################### END CODE HERE #####################
+
+# Some dummy variables
+episode = random.randint(0,500)
+qtable = np.random.randn(env.observation_space.sample(), env.action_space.sample())
+# Exploration-exploitation tradeoff
+epsilon = 1.0 # Set the probability that our agent will explore
+decay_rate = 0.01 # Rate at which our epsilon will exponentially decrease
+################### FILL IN CODE HERE ###################
+if random.uniform(0,1) < epsilon:
+    # Tell our agent to explore (take random actions)
+    action = None
+    print("Our agent is exploring")
+else:
+    # Tell our agent to explore (use our qtable from earlier)
+    # Hint: np.argmax(...) returns the maximum value along an axis
+    action = None
+    print("Our agent is exploiting")
+##################### END CODE HERE #####################
+# Decrease epsilon
+# Epsilon will decrease exponentially --> our agent will explore less and less
+epsilon = np.exp(-decay_rate*episode)
